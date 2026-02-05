@@ -6,16 +6,16 @@ import type { Task } from "@/lib/types";
 
 function fmt(ts?: number) {
   if (!ts) return "";
-  return new Date(ts).toLocaleString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
+  return new Date(ts).toLocaleString("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
-function TaskRow({
-  task,
-  actions,
-}: {
-  task: Task;
-  actions: React.ReactNode;
-}) {
+function TaskRow({ task, actions }: { task: Task; actions: React.ReactNode }) {
   return (
     <div className="card p-3 flex items-start justify-between gap-3">
       <div className="min-w-0">
@@ -46,11 +46,12 @@ export default function TodayBoard() {
 
   return (
     <div className="flex flex-col gap-6">
-      <section>
+      {/* ✅ Nowを常に視界へ（スクロールしても上に残す） */}
+      <section className="sticky top-3 z-10">
         <h2 className="text-base font-semibold mb-2">Now（いまやる1個）</h2>
 
         {nowTask ? (
-          <div className="card p-4">
+          <div className="card p-4 border-2 border-black bg-white">
             <div className="text-lg font-semibold break-words">{nowTask.title}</div>
             <div className="text-xs muted mt-1">選ばれたタスク。終えたら「完了」で次へ。</div>
 
@@ -70,7 +71,9 @@ export default function TodayBoard() {
             </div>
           </div>
         ) : (
-          <div className="card p-4 text-sm muted">Nowが空です。Inboxから「今日やる」を選ぶか、Nextから「今やる」を押してください。</div>
+          <div className="card p-4 border-2 border-black bg-white text-sm muted">
+            Nowが空です。Inboxから「今日やる」を選ぶか、Nextから「今やる」を押してください。
+          </div>
         )}
       </section>
 
@@ -116,7 +119,9 @@ export default function TodayBoard() {
               />
             ))
           ) : (
-            <div className="card p-4 text-sm muted">Nextは空です。Inboxで「今日やる」を選ぶとここ（またはNow）に入ります。</div>
+            <div className="card p-4 text-sm muted">
+              Nextは空です。Inboxで「今日やる」を選ぶとここ（またはNow）に入ります。
+            </div>
           )}
         </div>
       </section>
@@ -132,7 +137,9 @@ export default function TodayBoard() {
               </div>
             ))
           ) : (
-            <div className="card p-4 text-sm muted">まだ完了はありません。小さく1個終わらせるのが勝ちです。</div>
+            <div className="card p-4 text-sm muted">
+              まだ完了はありません。小さく1個終わらせるのが勝ちです。
+            </div>
           )}
         </div>
       </section>

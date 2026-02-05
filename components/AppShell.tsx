@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import QuickAdd from "@/components/QuickAdd";
+import NowBar from "@/components/NowBar";
 import { useTasks } from "@/hooks/useTasks";
 
 function cx(...xs: Array<string | false | undefined>) {
@@ -15,7 +16,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const { tasks, hydrated } = useTasks();
 
   const inboxCount = tasks.filter((t) => t.status === "inbox").length;
-  const todayCount = tasks.filter((t) => t.status === "today_now" || t.status === "today_next").length;
+  const todayCount = tasks.filter(
+    (t) => t.status === "today_now" || t.status === "today_next"
+  ).length;
   const doneCount = tasks.filter((t) => t.status === "done").length;
 
   const navItem = (href: string, label: string, badge?: number) => (
@@ -23,12 +26,19 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       href={href}
       className={cx(
         "px-3 py-2 rounded-xl border text-sm",
-        pathname === href ? "bg-black text-white border-black" : "bg-white border-slate-200"
+        pathname === href
+          ? "bg-black text-white border-black"
+          : "bg-white border-slate-200"
       )}
     >
       {label}
       {typeof badge === "number" && hydrated ? (
-        <span className={cx("ml-2 text-xs", pathname === href ? "text-white/80" : "text-slate-500")}>
+        <span
+          className={cx(
+            "ml-2 text-xs",
+            pathname === href ? "text-white/80" : "text-slate-500"
+          )}
+        >
           {badge}
         </span>
       ) : null}
@@ -50,6 +60,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             {navItem("/history", "History", doneCount)}
           </nav>
         </div>
+
+        {/* ✅ /app では TodayBoard 側に Now があるので重複表示しない */}
+        {pathname !== "/app" ? (
+          <div className="mt-4">
+            <NowBar />
+          </div>
+        ) : null}
 
         <div className="mt-4">
           <QuickAdd />
