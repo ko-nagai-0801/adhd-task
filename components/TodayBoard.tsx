@@ -30,55 +30,44 @@ function TaskRow({ task, actions }: { task: Task; actions: React.ReactNode }) {
 export default function TodayBoard() {
   const { hydrated, tasks, setNow, completeNow, move, reorderNext } = useTasks();
 
-  if (!hydrated) {
-    return <div className="text-sm muted">読み込み中…</div>;
-  }
+  if (!hydrated) return <div className="text-sm muted">読み込み中…</div>;
 
   const nowTask = tasks.find((t) => t.status === "today_now");
-  const nextTasks = tasks
-    .filter((t) => t.status === "today_next")
-    .sort((a, b) => a.order - b.order);
+  const nextTasks = tasks.filter((t) => t.status === "today_next").sort((a, b) => a.order - b.order);
 
-  const doneToday = tasks
+  const doneRecent = tasks
     .filter((t) => t.status === "done" && t.doneAt)
     .sort((a, b) => (b.doneAt ?? 0) - (a.doneAt ?? 0))
     .slice(0, 5);
 
   return (
     <div className="flex flex-col gap-6">
-      {/* ✅ Nowを常に視界へ（スクロールしても上に残す） */}
       <section className="sticky top-3 z-10">
-        <h2 className="text-base font-semibold mb-2">Now（いまやる1個）</h2>
+        <h2 className="text-base font-semibold mb-2">いまやる1個</h2>
 
         {nowTask ? (
-          <div className="card p-4 border-2 border-black bg-white">
+          <div className="card--focus p-4">
             <div className="text-lg font-semibold break-words">{nowTask.title}</div>
-            <div className="text-xs muted mt-1">選ばれたタスク。終えたら「完了」で次へ。</div>
+            <div className="text-xs muted mt-1">終えたら「完了」で次へ。</div>
 
             <div className="mt-4 flex gap-2 flex-wrap">
-              <button
-                onClick={() => completeNow()}
-                className="rounded-xl bg-black px-4 py-2 text-sm text-white"
-              >
+              <button onClick={() => completeNow()} className="btn-primary px-4 py-2 text-sm">
                 完了
               </button>
-              <button
-                onClick={() => move(nowTask.id, "today_next")}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm"
-              >
-                Nextに戻す
+              <button onClick={() => move(nowTask.id, "today_next")} className="btn-outline px-4 py-2 text-sm">
+                次へ戻す
               </button>
             </div>
           </div>
         ) : (
-          <div className="card p-4 border-2 border-black bg-white text-sm muted">
-            Nowが空です。Inboxから「今日やる」を選ぶか、Nextから「今やる」を押してください。
+          <div className="card--focus p-4 text-sm muted">
+            空です。受け皿で「今日やる」を選ぶか、次リストから「今やる」を押してください。
           </div>
         )}
       </section>
 
       <section>
-        <h2 className="text-base font-semibold mb-2">Next（次にやる）</h2>
+        <h2 className="text-base font-semibold mb-2">次にやる</h2>
 
         <div className="flex flex-col gap-2">
           {nextTasks.length ? (
@@ -88,29 +77,23 @@ export default function TodayBoard() {
                 task={t}
                 actions={
                   <>
-                    <button
-                      onClick={() => setNow(t.id)}
-                      className="rounded-xl bg-black px-3 py-2 text-xs text-white"
-                    >
+                    <button onClick={() => setNow(t.id)} className="btn-primary px-3 py-2 text-xs">
                       今やる
                     </button>
-                    <button
-                      onClick={() => move(t.id, "inbox")}
-                      className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs"
-                    >
-                      Inboxへ
+                    <button onClick={() => move(t.id, "inbox")} className="btn-outline px-3 py-2 text-xs">
+                      受け皿へ
                     </button>
                     <button
                       onClick={() => reorderNext(t.id, "up")}
                       disabled={i === 0}
-                      className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs disabled:opacity-40"
+                      className="btn-outline px-3 py-2 text-xs"
                     >
                       ↑
                     </button>
                     <button
                       onClick={() => reorderNext(t.id, "down")}
                       disabled={i === nextTasks.length - 1}
-                      className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs disabled:opacity-40"
+                      className="btn-outline px-3 py-2 text-xs"
                     >
                       ↓
                     </button>
@@ -119,27 +102,23 @@ export default function TodayBoard() {
               />
             ))
           ) : (
-            <div className="card p-4 text-sm muted">
-              Nextは空です。Inboxで「今日やる」を選ぶとここ（またはNow）に入ります。
-            </div>
+            <div className="card p-4 text-sm muted">次リストは空です。受け皿で「今日やる」を選ぶと入ります。</div>
           )}
         </div>
       </section>
 
       <section>
-        <h2 className="text-base font-semibold mb-2">Done（直近）</h2>
+        <h2 className="text-base font-semibold mb-2">直近の達成</h2>
         <div className="flex flex-col gap-2">
-          {doneToday.length ? (
-            doneToday.map((t) => (
+          {doneRecent.length ? (
+            doneRecent.map((t) => (
               <div key={t.id} className="card p-3">
                 <div className="text-sm font-medium break-words">{t.title}</div>
                 <div className="text-xs muted mt-1">完了: {fmt(t.doneAt)}</div>
               </div>
             ))
           ) : (
-            <div className="card p-4 text-sm muted">
-              まだ完了はありません。小さく1個終わらせるのが勝ちです。
-            </div>
+            <div className="card p-4 text-sm muted">まだ達成はありません。小さく1個でOKです。</div>
           )}
         </div>
       </section>

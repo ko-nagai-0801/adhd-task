@@ -1,10 +1,30 @@
 /* styles/theme.css */
 :root {
+  color-scheme: light;
+
   --bg: 255 255 255;
   --fg: 15 23 42; /* slate-900 */
   --muted: 100 116 139; /* slate-500 */
+
   --card: 248 250 252; /* slate-50 */
   --border: 226 232 240; /* slate-200 */
+
+  --primary: 0 0 0;
+  --primary-foreground: 255 255 255;
+}
+
+:root.dark {
+  color-scheme: dark;
+
+  --bg: 2 6 23; /* slate-950 */
+  --fg: 226 232 240; /* slate-200 */
+  --muted: 148 163 184; /* slate-400 */
+
+  --card: 15 23 42; /* slate-900 */
+  --border: 51 65 85; /* slate-700 */
+
+  --primary: 255 255 255;
+  --primary-foreground: 0 0 0;
 }
 
 body {
@@ -24,6 +44,68 @@ body {
   border-radius: 16px;
 }
 
+.card--focus {
+  background: rgb(var(--card));
+  border: 2px solid rgb(var(--primary));
+  border-radius: 16px;
+}
+
 .muted {
+  color: rgb(var(--muted));
+}
+
+/* UI Parts */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 14px;
+  border: 1px solid rgb(var(--border));
+  background: rgb(var(--bg));
+  color: rgb(var(--fg));
+}
+
+.pill--active {
+  border-color: rgb(var(--primary));
+  background: rgb(var(--primary));
+  color: rgb(var(--primary-foreground));
+}
+
+.badge {
+  font-size: 12px;
+  color: rgb(var(--muted));
+}
+
+.pill--active .badge {
+  color: rgb(var(--primary-foreground) / 0.8);
+}
+
+.btn-primary {
+  border-radius: 14px;
+  background: rgb(var(--primary));
+  color: rgb(var(--primary-foreground));
+}
+
+.btn-outline {
+  border-radius: 14px;
+  border: 1px solid rgb(var(--border));
+  background: rgb(var(--card));
+  color: rgb(var(--fg));
+}
+
+.btn-primary:disabled,
+.btn-outline:disabled {
+  opacity: 0.45;
+}
+
+.input {
+  border-radius: 14px;
+  border: 1px solid rgb(var(--border));
+  background: rgb(var(--card));
+  color: rgb(var(--fg));
+  outline: none;
+}
+
+.input::placeholder {
   color: rgb(var(--muted));
 }
