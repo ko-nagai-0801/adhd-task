@@ -16,8 +16,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { tasks, hydrated } = useTasks();
 
-  const inboxCount = tasks.filter((t) => t.status === "inbox").length;
-  const todayCount = tasks.filter((t) => t.status === "today_now" || t.status === "today_next").length;
+  const memoCount = tasks.filter((t) => t.status === "inbox").length;
+  const todayCount = tasks.filter(
+    (t) => t.status === "today_now" || t.status === "today_next"
+  ).length;
   const doneCount = tasks.filter((t) => t.status === "done").length;
 
   const navItem = (href: string, label: string, badge?: number) => (
@@ -41,20 +43,21 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-xl font-semibold">ADHDタスク</h1>
-            <p className="text-sm muted">ログイン不要 / 端末内保存（localStorage）</p>
+            <p className="text-sm muted">
+              ログイン不要 / 端末内保存（localStorage）
+            </p>
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
             <nav className="flex gap-2 flex-wrap">
               {navItem("/app", "今日", todayCount)}
-              {navItem("/inbox", "受け皿", inboxCount)}
+              {navItem("/inbox", "メモ箱", memoCount)}
               {navItem("/history", "達成", doneCount)}
             </nav>
             <ThemeToggle />
           </div>
         </div>
 
-        {/* /app では TodayBoard 側に Now があるので重複表示しない */}
         {pathname !== "/app" ? (
           <div className="mt-4">
             <NowBar />

@@ -11,7 +11,7 @@ function TaskRow({ task, actions }: { task: Task; actions: React.ReactNode }) {
       <div className="min-w-0">
         <div className="text-sm font-medium break-words">{task.title}</div>
         <div className="text-xs muted mt-1">
-          受け皿に置いてOK。選別は「あとで」で十分です。
+          メモ箱に置いてOK。選別は「あとで」で十分です。
         </div>
       </div>
       <div className="flex gap-2 shrink-0 flex-wrap justify-end">{actions}</div>
@@ -25,7 +25,7 @@ export default function InboxBoard() {
 
   if (!hydrated) return <div className="text-sm muted">読み込み中…</div>;
 
-  const inbox = tasks
+  const memo = tasks
     .filter((t) => t.status === "inbox")
     .sort((a, b) => a.order - b.order);
 
@@ -46,10 +46,10 @@ export default function InboxBoard() {
   return (
     <div className="flex flex-col gap-6">
       <section>
-        <h2 className="text-base font-semibold mb-2">受け皿</h2>
+        <h2 className="text-base font-semibold mb-2">メモ箱</h2>
         <div className="flex flex-col gap-2">
-          {inbox.length ? (
-            inbox.map((t) => (
+          {memo.length ? (
+            memo.map((t) => (
               <TaskRow
                 key={t.id}
                 task={t}
@@ -79,7 +79,7 @@ export default function InboxBoard() {
             ))
           ) : (
             <div className="card p-4 text-sm muted">
-              受け皿は空です。思いついたら上の入力で放り込めばOKです。
+              メモ箱は空です。思いついたら上の入力で放り込めばOKです。
             </div>
           )}
         </div>
@@ -105,7 +105,7 @@ export default function InboxBoard() {
                       onClick={() => move(t.id, "inbox")}
                       className="btn-outline px-3 py-2 text-xs"
                     >
-                      受け皿へ
+                      メモ箱へ
                     </button>
                     <button
                       onClick={() => move(t.id, "discarded")}
@@ -145,7 +145,9 @@ export default function InboxBoard() {
                   className="card p-3 flex items-start justify-between gap-3"
                 >
                   <div className="min-w-0">
-                    <div className="text-sm font-medium break-words">{t.title}</div>
+                    <div className="text-sm font-medium break-words">
+                      {t.title}
+                    </div>
                     <div className="text-xs muted mt-1">
                       復元できます（判断ミス対策）。
                     </div>
@@ -154,7 +156,7 @@ export default function InboxBoard() {
                     onClick={() => restoreDiscarded(t.id)}
                     className="btn-primary px-3 py-2 text-xs"
                   >
-                    受け皿に戻す
+                    メモ箱に戻す
                   </button>
                 </div>
               ))

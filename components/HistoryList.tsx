@@ -29,13 +29,11 @@ export default function HistoryList() {
   const { hydrated, tasks, undoDoneToInbox, move } = useTasks();
   const [filter, setFilter] = useState<Filter>("7d");
 
-  // ✅ Date.now() は render 中に呼ばない（purity対策）
-  // ✅ effect 内でも同期 setState を避ける（set-state-in-effect対策）ため、setTimeoutで非同期化
   const [nowTs, setNowTs] = useState<number>(0);
 
   useEffect(() => {
     const t0 = window.setTimeout(() => setNowTs(Date.now()), 0);
-    const id = window.setInterval(() => setNowTs(Date.now()), 60_000); // 1分ごとに更新
+    const id = window.setInterval(() => setNowTs(Date.now()), 60_000);
     return () => {
       window.clearTimeout(t0);
       window.clearInterval(id);
@@ -56,8 +54,7 @@ export default function HistoryList() {
       return list.filter((t) => isSameDay(new Date(t.doneAt!), now));
     }
 
-    // 7d
-    if (!nowTs) return list; // 初回（nowTs未設定）は一旦そのまま表示し、直後に更新される
+    if (!nowTs) return list;
     return list.filter((t) => (t.doneAt ?? 0) >= from7d);
   }, [tasks, filter, nowTs, from7d]);
 
@@ -130,7 +127,7 @@ export default function HistoryList() {
                   onClick={() => undoDoneToInbox(t.id)}
                   className="btn-outline px-3 py-2 text-xs"
                 >
-                  もう一度（受け皿）
+                  もう一度（メモ箱）
                 </button>
                 <button
                   onClick={() => move(t.id, "today_next")}
