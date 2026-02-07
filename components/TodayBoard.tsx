@@ -3,6 +3,8 @@
 
 import { useTasks } from "@/hooks/useTasks";
 import type { Task } from "@/lib/types";
+import PomodoroTimer from "@/components/PomodoroTimer";
+import DailyGoalIndicator from "@/components/DailyGoalIndicator";
 
 function fmt(ts?: number) {
   if (!ts) return "";
@@ -15,11 +17,33 @@ function fmt(ts?: number) {
   });
 }
 
+function EstimateBadge({ minutes }: { minutes?: number }) {
+  if (!minutes) return null;
+  return (
+    <span
+      className="inline-block text-[10px] px-1.5 py-0.5 rounded-md"
+      style={{
+        background: "rgb(var(--border))",
+        color: "rgb(var(--muted))",
+      }}
+    >
+      {minutes}分
+    </span>
+  );
+}
+
 function TaskRow({ task, actions }: { task: Task; actions: React.ReactNode }) {
   return (
     <div className="card p-3 flex items-start justify-between gap-3">
       <div className="min-w-0">
-        <div className="text-sm font-medium break-words">{task.title}</div>
+        <div className="text-sm font-medium break-words">
+          {task.title}
+          {task.estimatedMinutes && (
+            <span className="ml-2">
+              <EstimateBadge minutes={task.estimatedMinutes} />
+            </span>
+          )}
+        </div>
         <div className="text-xs muted mt-1">作成: {fmt(task.createdAt)}</div>
       </div>
       <div className="flex gap-2 shrink-0 flex-wrap justify-end">{actions}</div>
@@ -46,15 +70,28 @@ export default function TodayBoard() {
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Daily Goal */}
+      <DailyGoalIndicator />
+
       <section>
         <h2 className="text-base font-semibold mb-2">Now（いまやる1個）</h2>
 
         {nowTask ? (
           <div className="card--focus p-4">
-            <div className="text-lg font-semibold break-words">{nowTask.title}</div>
+            <div className="text-lg font-semibold break-words">
+              {nowTask.title}
+              {nowTask.estimatedMinutes && (
+                <span className="ml-2">
+                  <EstimateBadge minutes={nowTask.estimatedMinutes} />
+                </span>
+              )}
+            </div>
             <div className="text-xs muted mt-1">
               選ばれたタスク。終えたら「完了」で次へ。
             </div>
+
+            {/* Pomodoro Timer */}
+            <PomodoroTimer taskId={nowTask.id} />
 
             <div className="mt-4 flex gap-2 flex-wrap">
               <button onClick={() => completeNow()} className="btn-primary px-4 py-2 text-sm" aria-label="現在のタスクを完了にする">

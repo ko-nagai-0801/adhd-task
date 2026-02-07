@@ -3,11 +3,39 @@
 
 import { useEffect, useRef } from "react";
 
-const shortcuts = [
-  { key: "n", description: "メモ箱に素早く追加（入力欄にフォーカス）" },
-  { key: "?", description: "このショートカット一覧を表示 / 非表示" },
-  { key: "Esc", description: "この一覧を閉じる" },
-] as const;
+type ShortcutEntry = {
+  key: string;
+  description: string;
+};
+
+type ShortcutSection = {
+  title: string;
+  shortcuts: ShortcutEntry[];
+};
+
+const sections: ShortcutSection[] = [
+  {
+    title: "共通",
+    shortcuts: [
+      { key: "n", description: "メモ箱に素早く追加（入力欄にフォーカス）" },
+      { key: "d", description: "Nowタスクを完了" },
+      { key: "t", description: "今日ページへ移動" },
+      { key: "i", description: "メモ箱ページへ移動" },
+      { key: "h", description: "履歴ページへ移動" },
+      { key: "?", description: "このショートカット一覧を表示 / 非表示" },
+      { key: "Esc", description: "この一覧を閉じる / フォーカス解除" },
+    ],
+  },
+  {
+    title: "今日ページ",
+    shortcuts: [
+      { key: "j", description: "Nextリスト内の次タスクにフォーカス" },
+      { key: "k", description: "Nextリスト内の前タスクにフォーカス" },
+      { key: "Enter", description: "フォーカス中のタスクをNowに昇格" },
+      { key: "Space", description: "フォーカス中のタスクの詳細を開く" },
+    ],
+  },
+];
 
 export default function KeyboardHelp({ onClose }: { onClose: () => void }) {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -49,18 +77,25 @@ export default function KeyboardHelp({ onClose }: { onClose: () => void }) {
           </button>
         </div>
 
-        <table className="w-full text-sm">
-          <tbody>
-            {shortcuts.map((s) => (
-              <tr key={s.key} className="keyboard-help-row">
-                <td className="py-1.5 pr-4">
-                  <kbd className="keyboard-help-kbd">{s.key}</kbd>
-                </td>
-                <td className="py-1.5 muted">{s.description}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {sections.map((section) => (
+          <div key={section.title} className="mb-4 last:mb-0">
+            <h3 className="text-xs font-semibold muted mb-1.5">
+              {section.title}
+            </h3>
+            <table className="w-full text-sm">
+              <tbody>
+                {section.shortcuts.map((s) => (
+                  <tr key={s.key} className="keyboard-help-row">
+                    <td className="py-1.5 pr-4">
+                      <kbd className="keyboard-help-kbd">{s.key}</kbd>
+                    </td>
+                    <td className="py-1.5 muted">{s.description}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
       </div>
     </div>
   );

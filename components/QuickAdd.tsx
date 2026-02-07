@@ -30,7 +30,7 @@ export default function QuickAdd() {
           id="quick-add-input"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="いま思いついたことを1行で（Enterで追加）"
+          placeholder="いま思いついたことを1行で（Nキーでも開ける）"
           className="input w-full px-3 py-2 text-sm"
           inputMode="text"
           aria-label="新しいタスクを入力"

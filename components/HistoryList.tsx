@@ -4,6 +4,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTasks } from "@/hooks/useTasks";
 import type { Task } from "@/lib/types";
+import WeeklyChart from "@/components/WeeklyChart";
+import TimePatternAnalysis from "@/components/TimePatternAnalysis";
 
 function fmt(ts?: number) {
   if (!ts) return "";
@@ -22,6 +24,31 @@ function isSameDay(a: Date, b: Date) {
     a.getFullYear() === b.getFullYear() &&
     a.getMonth() === b.getMonth() &&
     a.getDate() === b.getDate()
+  );
+}
+
+function AccuracyBadge({ estimated, actual }: { estimated?: number; actual?: number }) {
+  if (!estimated || !actual) return null;
+  const ratio = actual / estimated;
+  let label: string;
+  let color: string;
+  if (ratio <= 1.1) {
+    label = "ぴったり";
+    color = "rgb(34 197 94)";
+  } else if (ratio <= 1.5) {
+    label = "ちょい超え";
+    color = "rgb(234 179 8)";
+  } else {
+    label = `${Math.round(ratio * 100 - 100)}%超`;
+    color = "rgb(239 68 68)";
+  }
+  return (
+    <span
+      className="inline-block text-[10px] px-1.5 py-0.5 rounded-md ml-1"
+      style={{ background: `${color}20`, color }}
+    >
+      {label}
+    </span>
   );
 }
 
@@ -110,6 +137,12 @@ export default function HistoryList() {
         </div>
       </section>
 
+      {/* Weekly Chart */}
+      <WeeklyChart tasks={tasks} />
+
+      {/* Time Pattern Analysis */}
+      <TimePatternAnalysis tasks={tasks} />
+
       <section className="flex flex-col gap-2">
         {done.length ? (
           done.map((t: Task) => (
@@ -119,7 +152,16 @@ export default function HistoryList() {
             >
               <div className="min-w-0">
                 <div className="text-sm font-medium break-words">{t.title}</div>
-                <div className="text-xs muted mt-1">完了: {fmt(t.doneAt)}</div>
+                <div className="text-xs muted mt-1">
+                  完了: {fmt(t.doneAt)}
+                  {t.actualMinutes && (
+                    <span className="ml-2">実績: {t.actualMinutes}分</span>
+                  )}
+                  <AccuracyBadge
+                    estimated={t.estimatedMinutes}
+                    actual={t.actualMinutes}
+                  />
+                </div>
               </div>
 
               <div className="flex gap-2 flex-wrap justify-end">
