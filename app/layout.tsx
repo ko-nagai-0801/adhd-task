@@ -8,6 +8,7 @@ import AppShell from "@/components/AppShell";
 export const metadata: Metadata = {
   title: "ADHDタスク",
   description: "ログイン不要のADHD向けタスク管理（ローカル保存）",
+  icons: { icon: "/favicon.ico" },
 };
 
 const themeInitScript = `

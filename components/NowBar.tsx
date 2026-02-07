@@ -22,22 +22,24 @@ export default function NowBar() {
         </div>
 
         <div className="flex gap-2 flex-wrap justify-end">
-          <button onClick={() => completeNow()} className="btn-primary px-4 py-2 text-sm">
+          <button onClick={() => completeNow()} className="btn-primary px-4 py-2 text-sm" aria-label="現在のタスクを完了にする">
             完了
           </button>
           <button
             onClick={() => move(nowTask.id, "today_next")}
             className="btn-outline px-4 py-2 text-sm"
+            aria-label="Nextリストに戻す"
           >
             次へ
           </button>
           <button
             onClick={() => move(nowTask.id, "inbox")}
             className="btn-outline px-4 py-2 text-sm"
+            aria-label="メモ箱に戻す"
           >
             メモ箱へ
           </button>
-          <Link href="/app" className="btn-outline px-4 py-2 text-sm">
+          <Link href="/app" className="btn-outline px-4 py-2 text-sm" aria-label="今日のタスク一覧へ">
             今日へ
           </Link>
         </div>

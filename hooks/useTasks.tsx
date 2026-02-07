@@ -2,7 +2,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useMemo, useReducer } from "react";
-import { loadTasksFromStorage, saveTasksToStorage } from "@/lib/storage";
+import { loadTasksFromStorage, saveTasksToStorage, importTasksFromJSON } from "@/lib/storage";
 import { initialTasksState, tasksReducer } from "@/lib/tasks";
 import type { Task, TaskStatus } from "@/lib/types";
 
@@ -16,6 +16,7 @@ type TasksContextValue = {
   reorderNext: (id: string, dir: "up" | "down") => void;
   restoreDiscarded: (id: string) => void;
   undoDoneToInbox: (id: string) => void;
+  importTasks: (json: string) => boolean;
 };
 
 const TasksContext = createContext<TasksContextValue | null>(null);
@@ -71,6 +72,13 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
 
       undoDoneToInbox(id) {
         dispatch({ type: "UNDO_DONE_TO_INBOX", id, now: Date.now() });
+      },
+
+      importTasks(json: string): boolean {
+        const tasks = importTasksFromJSON(json);
+        if (!tasks) return false;
+        dispatch({ type: "IMPORT_TASKS", tasks });
+        return true;
       },
     };
   }, [state.hydrated, state.tasks]);

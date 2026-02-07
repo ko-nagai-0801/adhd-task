@@ -6,7 +6,9 @@ import { usePathname } from "next/navigation";
 import QuickAdd from "@/components/QuickAdd";
 import NowBar from "@/components/NowBar";
 import ThemeToggle from "@/components/ThemeToggle";
+import KeyboardHelp from "@/components/KeyboardHelp";
 import { useTasks } from "@/hooks/useTasks";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 function cx(...xs: Array<string | false | undefined>) {
   return xs.filter(Boolean).join(" ");
@@ -15,6 +17,7 @@ function cx(...xs: Array<string | false | undefined>) {
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { tasks, hydrated } = useTasks();
+  const { showHelp, closeHelp } = useKeyboardShortcuts();
 
   const memoCount = tasks.filter((t) => t.status === "inbox").length;
   const todayCount = tasks.filter(
@@ -29,6 +32,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         "pill px-3 py-2 text-sm",
         pathname === href && "pill--active"
       )}
+      aria-current={pathname === href ? "page" : undefined}
     >
       {label}
       {typeof badge === "number" && hydrated ? (
@@ -49,7 +53,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
-            <nav className="flex gap-2 flex-wrap">
+            <nav className="flex gap-2 flex-wrap" aria-label="メインナビゲーション">
               {navItem("/app", "今日", todayCount)}
               {navItem("/inbox", "メモ箱", memoCount)}
               {navItem("/history", "達成", doneCount)}
@@ -74,6 +78,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <footer className="mt-10 pb-6 text-xs muted">
         ※ データはこの端末のブラウザに保存されます（ログインなし）。ブラウザのデータ削除で消える可能性があります。
       </footer>
+
+      {showHelp && <KeyboardHelp onClose={closeHelp} />}
     </div>
   );
 }

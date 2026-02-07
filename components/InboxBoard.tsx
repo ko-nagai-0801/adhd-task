@@ -58,18 +58,21 @@ export default function InboxBoard() {
                     <button
                       onClick={() => moveToToday(t.id)}
                       className="btn-primary px-3 py-2 text-xs"
+                      aria-label={`「${t.title}」を今日やる`}
                     >
                       今日やる
                     </button>
                     <button
                       onClick={() => move(t.id, "later")}
                       className="btn-outline px-3 py-2 text-xs"
+                      aria-label={`「${t.title}」をあとでやる`}
                     >
                       あとで
                     </button>
                     <button
                       onClick={() => move(t.id, "discarded")}
                       className="btn-outline px-3 py-2 text-xs"
+                      aria-label={`「${t.title}」をやらない`}
                     >
                       やらない
                     </button>
@@ -98,18 +101,21 @@ export default function InboxBoard() {
                     <button
                       onClick={() => moveToToday(t.id)}
                       className="btn-primary px-3 py-2 text-xs"
+                      aria-label={`「${t.title}」を今日やる`}
                     >
                       今日やる
                     </button>
                     <button
                       onClick={() => move(t.id, "inbox")}
                       className="btn-outline px-3 py-2 text-xs"
+                      aria-label={`「${t.title}」をメモ箱へ`}
                     >
                       メモ箱へ
                     </button>
                     <button
                       onClick={() => move(t.id, "discarded")}
                       className="btn-outline px-3 py-2 text-xs"
+                      aria-label={`「${t.title}」をやらない`}
                     >
                       やらない
                     </button>
@@ -131,6 +137,8 @@ export default function InboxBoard() {
           <button
             onClick={() => setShowDiscarded((v) => !v)}
             className="btn-outline px-3 py-2 text-xs"
+            aria-label={showDiscarded ? "やらないリストを隠す" : "やらないリストを表示する"}
+            aria-expanded={showDiscarded}
           >
             {showDiscarded ? "隠す" : `表示（${discarded.length}）`}
           </button>
@@ -155,6 +163,7 @@ export default function InboxBoard() {
                   <button
                     onClick={() => restoreDiscarded(t.id)}
                     className="btn-primary px-3 py-2 text-xs"
+                    aria-label={`「${t.title}」をメモ箱に戻す`}
                   >
                     メモ箱に戻す
                   </button>

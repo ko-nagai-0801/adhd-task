@@ -27,11 +27,13 @@ export default function QuickAdd() {
         className="flex flex-col gap-2 sm:flex-row sm:items-center"
       >
         <input
+          id="quick-add-input"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="いま思いついたことを1行で（Enterで追加）"
           className="input w-full px-3 py-2 text-sm"
           inputMode="text"
+          aria-label="新しいタスクを入力"
         />
         <button type="submit" className="btn-primary px-4 py-2 text-sm">
           メモ箱に追加

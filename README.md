@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ADHDタスク
 
-## Getting Started
+**「いま、この1個だけ」** に集中するためのタスク管理アプリ。
 
-First, run the development server:
+ADHD当事者の「やることが多すぎて何もできない」を解消するために設計しました。ログイン不要、データは端末内に保存（localStorage）。開いた瞬間から使えます。
+
+## なぜこのアプリ？
+
+| 設計判断 | 理由 |
+|---|---|
+| **ログイン不要** | 「アカウント作成」というハードルでアプリを開かなくなるのを防ぐ |
+| **Nowは常に1個だけ** | 複数タスクが見えると優先順位の迷いで動けなくなる。1個に絞ることで「これだけやればいい」を明確に |
+| **メモ箱で気軽に放り込む** | 思いついた瞬間にキャプチャ。整理は「あとで」でOK |
+| **やらない＝復元できる** | 判断ミスへの不安を減らす。捨てても戻せる安心感 |
+| **端末内保存** | サーバー障害・ネットワーク不調に左右されない即時性 |
+
+## 機能一覧
+
+- **メモ箱（Inbox）** — 思いついたタスクを1行で即追加
+- **今日やる（Today）** — Now（いまやる1個）＋ Next（次にやる）の2層構造
+- **達成（History）** — 完了タスクの履歴。「やれた」を可視化
+- **あとで（Later）** — 今日じゃなくていいものを退避
+- **やらない（Discarded）** — 不要と判断したタスク。いつでも復元可能
+- **テーマ切替** — ライト / ダーク / 自動（OS連動）
+- **NowBar** — 今日ページ以外でも「いまやる1個」を常に表示
+
+## 技術スタック
+
+- [Next.js](https://nextjs.org/) 16 (App Router)
+- [React](https://react.dev/) 19
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/) 4
+- localStorage によるクライアントサイド永続化
+
+## 開発環境セットアップ
 
 ```bash
+# リポジトリをクローン
+git clone <repository-url>
+cd adhd-task
+
+# 依存パッケージをインストール
+npm install
+
+# 開発サーバーを起動
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで http://localhost:3000 を開くとアプリが表示されます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## プロジェクト構成
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+adhd-task/
+├── app/            # Next.js App Router ページ
+├── components/     # UIコンポーネント
+├── hooks/          # カスタムフック（useTasks, useTheme）
+├── lib/            # 型定義・ユーティリティ
+└── public/         # 静的アセット
+```
 
-## Learn More
+## 注意事項
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- データはブラウザの localStorage に保存されます。ブラウザのデータ削除で消える可能性があります。
+- サーバーへのデータ送信は一切行いません。

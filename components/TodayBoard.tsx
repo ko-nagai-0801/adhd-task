@@ -57,18 +57,20 @@ export default function TodayBoard() {
             </div>
 
             <div className="mt-4 flex gap-2 flex-wrap">
-              <button onClick={() => completeNow()} className="btn-primary px-4 py-2 text-sm">
+              <button onClick={() => completeNow()} className="btn-primary px-4 py-2 text-sm" aria-label="現在のタスクを完了にする">
                 完了
               </button>
               <button
                 onClick={() => move(nowTask.id, "today_next")}
                 className="btn-outline px-4 py-2 text-sm"
+                aria-label="Nextリストに戻す"
               >
                 Nextに戻す
               </button>
               <button
                 onClick={() => move(nowTask.id, "inbox")}
                 className="btn-outline px-4 py-2 text-sm"
+                aria-label="メモ箱に戻す"
               >
                 メモ箱へ
               </button>
@@ -92,16 +94,17 @@ export default function TodayBoard() {
                 task={t}
                 actions={
                   <>
-                    <button onClick={() => setNow(t.id)} className="btn-primary px-3 py-2 text-xs">
+                    <button onClick={() => setNow(t.id)} className="btn-primary px-3 py-2 text-xs" aria-label={`「${t.title}」を今やる`}>
                       今やる
                     </button>
-                    <button onClick={() => move(t.id, "inbox")} className="btn-outline px-3 py-2 text-xs">
+                    <button onClick={() => move(t.id, "inbox")} className="btn-outline px-3 py-2 text-xs" aria-label={`「${t.title}」をメモ箱へ`}>
                       メモ箱へ
                     </button>
                     <button
                       onClick={() => reorderNext(t.id, "up")}
                       disabled={i === 0}
                       className="btn-outline px-3 py-2 text-xs disabled:opacity-40"
+                      aria-label={`「${t.title}」を上に移動`}
                     >
                       ↑
                     </button>
@@ -109,6 +112,7 @@ export default function TodayBoard() {
                       onClick={() => reorderNext(t.id, "down")}
                       disabled={i === nextTasks.length - 1}
                       className="btn-outline px-3 py-2 text-xs disabled:opacity-40"
+                      aria-label={`「${t.title}」を下に移動`}
                     >
                       ↓
                     </button>

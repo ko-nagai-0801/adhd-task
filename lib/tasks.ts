@@ -14,7 +14,8 @@ export type TasksAction =
   | { type: "COMPLETE_NOW"; now: number }
   | { type: "REORDER_TODAY_NEXT"; id: string; dir: "up" | "down"; now: number }
   | { type: "RESTORE_FROM_DISCARDED"; id: string; now: number }
-  | { type: "UNDO_DONE_TO_INBOX"; id: string; now: number };
+  | { type: "UNDO_DONE_TO_INBOX"; id: string; now: number }
+  | { type: "IMPORT_TASKS"; tasks: Task[] };
 
 export const initialTasksState: TasksState = {
   hydrated: false,
@@ -215,6 +216,15 @@ export function tasksReducer(state: TasksState, action: TasksAction): TasksState
         };
       });
       return { ...state, tasks };
+    }
+
+    case "IMPORT_TASKS": {
+      const now = Date.now();
+      const normalized = promoteNextToNowIfEmpty(
+        ensureSingleNow(action.tasks, now),
+        now
+      );
+      return { hydrated: true, tasks: normalized };
     }
 
     default:

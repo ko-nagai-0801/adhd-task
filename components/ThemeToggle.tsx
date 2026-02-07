@@ -18,6 +18,7 @@ export default function ThemeToggle() {
       onClick={cycleTheme}
       className="btn-outline px-3 py-2 text-xs"
       title="表示モード（自動→ライト→ダーク）"
+      aria-label={`表示モード切替（現在: ${label(theme)}）`}
     >
       表示: <span className="font-semibold">{label(theme)}</span>
     </button>

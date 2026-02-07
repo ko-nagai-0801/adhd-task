@@ -109,3 +109,129 @@ body {
 .input::placeholder {
   color: rgb(var(--muted));
 }
+
+/* ── Animations ─────────────────────────── */
+
+.task-enter {
+  animation: task-fade-in 0.25s ease-out both;
+}
+
+.task-exit {
+  animation: task-fade-out 0.3s ease-in both;
+}
+
+@keyframes task-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes task-fade-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.btn-action {
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.btn-action:hover {
+  transform: scale(1.04);
+}
+
+.btn-action:active {
+  transform: scale(0.97);
+}
+
+/* ── Reduced Motion ─────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .task-enter,
+  .task-exit {
+    animation: none;
+  }
+
+  .btn-action {
+    transition: none;
+  }
+
+  .btn-action:hover,
+  .btn-action:active {
+    transform: none;
+  }
+}
+
+/* ── Keyboard Help ──────────────────────── */
+
+.keyboard-help-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  animation: overlay-fade-in 0.15s ease-out;
+}
+
+@keyframes overlay-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.keyboard-help-dialog {
+  max-width: 360px;
+  width: calc(100% - 32px);
+}
+
+.keyboard-help-row + .keyboard-help-row {
+  border-top: 1px solid rgb(var(--border));
+}
+
+.keyboard-help-kbd {
+  display: inline-block;
+  min-width: 28px;
+  padding: 2px 8px;
+  border: 1px solid rgb(var(--border));
+  border-radius: 6px;
+  background: rgb(var(--bg));
+  font-family: monospace;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ── Mobile Touch Targets ───────────────── */
+
+@media (pointer: coarse) {
+  .btn-primary,
+  .btn-outline,
+  .pill {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .container {
+    padding: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .keyboard-help-overlay {
+    animation: none;
+  }
+}
